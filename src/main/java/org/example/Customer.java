@@ -4,6 +4,7 @@ public class Customer {
     private String firstName;
     private String lastName;
     private long customerID;
+    private int retrievalInterval;
 
     public Customer(String firstName, String lastName, long customerID) {
         this.firstName = firstName;

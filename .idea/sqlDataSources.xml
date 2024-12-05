@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="df483b59-f064-4f27-afbd-bfa2c115d95f" name="RealTimeTicketingSystem@localhost Mapping">
+      <data-sources db="ad3312d0-978d-45c2-936a-c0a13fdff7a8" ddl="9ee04ec4-315d-482c-8e06-fc0ab67beae3" />
+      <scope>
+        <node kind="database" qname="RealTimeTicketingSystem" />
+      </scope>
+    </mapping>
+  </component>
+</project>
