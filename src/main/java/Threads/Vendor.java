@@ -11,12 +11,14 @@ import java.util.*;
 public class Vendor implements Runnable {
     private String vendorName;
     private int vendorId;
+    private int numOfTickets;
 
     private TicketPool ticketPool;
 
-    public Vendor(String vendorName, int vendorId) {
+    public Vendor(String vendorName, int vendorId, int numOfTickets) {
         this.vendorName = vendorName;
         this.vendorId = vendorId;
+        this.numOfTickets = numOfTickets;
     }
 
     public Vendor(TicketPool ticketPool) {
@@ -30,14 +32,15 @@ public class Vendor implements Runnable {
     public void setVendorName(String vendorName) {this.vendorName = vendorName;}
     public void setVendorId(int vendorId) {this.vendorId = vendorId;}
 
-    public static void insertVendor(int vendorId, String vendorName) throws SQLException {
-        String sql = "INSERT INTO \"Vendor\" VALUES (?, ?)";
+    public static void insertVendor(int vendorId, String vendorName, int numOfTickets) throws SQLException {
+        String sql = "INSERT INTO \"Vendor\" VALUES (?, ?, ?)";
 
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/RealTimeTicketingSystem", "postgres", "");
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, vendorId);
             preparedStatement.setString(2, vendorName);
+            preparedStatement.setInt(3, numOfTickets);
 
             int rowsInserted = preparedStatement.executeUpdate();
 
