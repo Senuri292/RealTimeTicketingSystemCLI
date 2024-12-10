@@ -1,16 +1,11 @@
 package Threads;
+
 import Core.TicketPool;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.*;
-
+import java.sql.*;
 
 public class Vendor implements Runnable {
     private String vendorName;
-    private int vendorId;
+    private static int vendorId;
     private int numOfTickets;
 
     private TicketPool ticketPool;
@@ -28,9 +23,11 @@ public class Vendor implements Runnable {
     public Vendor() {}
 
     public String getVendorName() {return vendorName;}
-    public int getVendorId() {return vendorId;}
+    public static int getVendorId() {return vendorId;}
     public void setVendorName(String vendorName) {this.vendorName = vendorName;}
     public void setVendorId(int vendorId) {this.vendorId = vendorId;}
+    public int getNumOfTickets() {return numOfTickets;}
+    public void setNumOfTickets(int numOfTickets) {this.numOfTickets = numOfTickets;}
 
     public static void insertVendor(int vendorId, String vendorName, int numOfTickets) throws SQLException {
         String sql = "INSERT INTO \"Vendor\" VALUES (?, ?, ?)";
@@ -39,6 +36,7 @@ public class Vendor implements Runnable {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, vendorId);
+            System.out.println("vendorName: " + vendorName);
             preparedStatement.setString(2, vendorName);
             preparedStatement.setInt(3, numOfTickets);
 
@@ -50,15 +48,14 @@ public class Vendor implements Runnable {
         } catch (SQLException e) {
             System.err.println("Error inserting vendor: " + e.getMessage());
         }
-
+        System.out.println("Vendors credentials: "+ vendorId + "-" + vendorName);
     }
 
     @Override
     public void run() {
         int ticketCount = 1;
         while (true) {
-            String ticket = vendorName + "-Ticket-" + ticketCount++;
-            ticketPool.addTickets(ticket); // Add tickets to the pool
+            ticketPool.addTickets(numOfTickets); // Add tickets to the pool
             try {
                 Thread.sleep(500); // Simulate time taken to release a ticket
             } catch (InterruptedException e) {
@@ -68,18 +65,8 @@ public class Vendor implements Runnable {
             }
         }
     }
-
 }
-//    public void addVendorDetails(Vendor vendorDetails) {}
-//    public void viewVendors () {
-//        //give a return type maybe a list
-//    }
-//    public void updateVendor(long vendorID) {
-//        int updateID;
-//        System.out.println("------------Update Vendor Details------------");
-//        System.out.println("Enter Vendor ID: ");
-//        updateID = input.nextInt();}
-//public void deleteVendor(long vendorID) {}
+
 
 
 

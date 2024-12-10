@@ -2,14 +2,9 @@ package Config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.*;
-import java.util.Scanner;
-import java.util.logging.Logger;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-
 
 public class Configuration {
     private int totalTickets;
@@ -51,9 +46,4 @@ public class Configuration {
             return gson.fromJson(fileReader, Configuration.class);
         }
     }
-
-
-    // Step 3: Write the JSON to a file
-
-
 }
