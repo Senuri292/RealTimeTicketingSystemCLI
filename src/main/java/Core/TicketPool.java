@@ -33,7 +33,7 @@ public class TicketPool implements TicketOperation {
     public List<String> getTickets() {
         return tickets;
     }
-
+    // overriding addTickets method in TicketOperation
     @Override
     public synchronized void addTickets(int ticket) {
         while (totalTickets == maxTicketCapacity) {
@@ -48,7 +48,7 @@ public class TicketPool implements TicketOperation {
         totalTickets += ticket;
         System.out.println("Ticket added: " + ticket + " | Total Tickets: " + totalTickets);
     }
-
+    // overriding removeTicket method from TicketOperation
     @Override
     public synchronized int removeTickets(int numOfTickets) {
         while (totalTickets == 0) {

@@ -28,15 +28,13 @@ public class Vendor implements Runnable {
     public void setVendorId(int vendorId) {this.vendorId = vendorId;}
     public int getNumOfTickets() {return numOfTickets;}
     public void setNumOfTickets(int numOfTickets) {this.numOfTickets = numOfTickets;}
-
+    // inserting vendor details into database
     public static void insertVendor(int vendorId, String vendorName, int numOfTickets) throws SQLException {
         String sql = "INSERT INTO \"Vendor\" VALUES (?, ?, ?)";
-
+        // link connection
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/RealTimeTicketingSystem", "postgres", "");
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
             preparedStatement.setInt(1, vendorId);
-            System.out.println("vendorName: " + vendorName);
             preparedStatement.setString(2, vendorName);
             preparedStatement.setInt(3, numOfTickets);
 
@@ -48,9 +46,10 @@ public class Vendor implements Runnable {
         } catch (SQLException e) {
             System.err.println("Error inserting vendor: " + e.getMessage());
         }
+        // letting user know which details were saved
         System.out.println("Vendors credentials: "+ vendorId + "-" + vendorName);
     }
-
+    // overriding ru method from runnable
     @Override
     public void run() {
         int ticketCount = 1;

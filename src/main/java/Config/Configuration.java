@@ -26,7 +26,7 @@ public class Configuration {
     public void setCustomerRetrievalRate(int customerRetrievalRate) {this.customerRetrievalRate = customerRetrievalRate;}
     public int getMaxTicketCapacity() {return maxTicketCapacity;}
     public void setMaxTicketCapacity(int maxTicketCapacity) {this.maxTicketCapacity = maxTicketCapacity;}
-
+    // METHOD TO SAVE TO .JSON FILE
     public static void saveToFile(int totalTickets, int ticketReleaseRate, int customerRetrievalRate, int maxTicketCapacity) throws IOException {
         Configuration config = new Configuration(totalTickets, ticketReleaseRate, customerRetrievalRate, maxTicketCapacity);
 
@@ -39,7 +39,7 @@ public class Configuration {
             e.printStackTrace();
         }
     }
-
+    // METHOD TO LOAD DATA FROM .JSON FILE
     public static Configuration loadFromFile() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileReader fileReader = new FileReader("Configuration.json")) {

@@ -27,13 +27,12 @@ public class Customer implements Runnable {
     public void setCustomerID(int customerId) {this.customerId = customerId;}
     public String getFirstName() {return firstName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}
-
+    // inserting customer details to database
     public static void insertCustomer(int customerId, String firstName, int numOfTickets) throws SQLException {
         String sql = "INSERT INTO \"Customer\" VALUES (?, ?, ?)";
-
+        // linking connection
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/RealTimeTicketingSystem", "postgres", "");
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
             preparedStatement.setInt(1, customerId);
             preparedStatement.setString(2, firstName);
             preparedStatement.setInt(3, numOfTickets);
@@ -46,9 +45,10 @@ public class Customer implements Runnable {
         } catch (SQLException e) {
             System.err.println("Error inserting Customer: " + e.getMessage());
         }
+        // letting user know what details were saved
         System.out.println("Customers credentials: "+ customerId + "-" + firstName);
     }
-
+    // overriding run method from runnable
     @Override
     public void run() {
         while (true) {

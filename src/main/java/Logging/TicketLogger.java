@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.sql.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
-
+// logger class handles logging
 public class TicketLogger {
     private static final Logger LOGGER = Logger.getLogger(TicketLogger.class.getName());
 
@@ -36,14 +36,14 @@ public class TicketLogger {
     private int maxTicketCapacity;
 
     public static TicketPool ticketPool;
-
+    // making total tickets an atomic integer for easy use
     private static AtomicInteger totalTickets;
 
     public TicketLogger() {
         // Initialize ticketPool in the constructor
         this.ticketPool = new TicketPool(numTickets, maxTicketCapacity);
     }
-
+    // log method to handle logs
     public static void log(int numTickets, int releaseRate, int retrievalRate, int maxTicketCapacity) {
         Scanner input = new Scanner(System.in);
 
@@ -53,17 +53,17 @@ public class TicketLogger {
         List<Thread> customerThreads = new ArrayList<>();
 
         totalTickets = new AtomicInteger(numTickets);
-
+        // connecting to database and getting vendors details
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/RealTimeTicketingSystem", "postgres", "")) {
             String queryVendor = "SELECT \"vendorId\", \"vendorName\", \"numOfTickets\" FROM \"Vendor\"";
             PreparedStatement statementVendor = connection.prepareStatement(queryVendor);
             ResultSet resultSet = statementVendor.executeQuery();
-
+            // put data into variables
             while (resultSet.next()) {
                 String vendorId = resultSet.getString("vendorId");
                 String vendorName = resultSet.getString("vendorName");
                 int ticketsToSell = resultSet.getInt("numOfTickets");
-
+                // vendor thread start
                 Thread vendorThread = new Thread(() -> {
                     while (totalTickets.get() < maxTicketCapacity) { // Use ticketsToSell for each vendor
                         ticketPool.addTickets(ticketsToSell);
@@ -78,16 +78,16 @@ public class TicketLogger {
                 });
                 vendorThreads.add(vendorThread);
             }
-
+            // connecting to database and getting customers details
             String queryCustomer = "SELECT \"customerId\", \"firstName\", \"numOfTickets\" FROM \"Customer\"";
             PreparedStatement statementCustomer = connection.prepareStatement(queryCustomer);
             ResultSet resultSetCustomer = statementCustomer.executeQuery();
-
+            // put data into variables
             while (resultSetCustomer.next()) {
                 String customerId = resultSetCustomer.getString("customerId");
                 String customerName = resultSetCustomer.getString("firstName");
                 int ticketsToBuy = resultSetCustomer.getInt("numOfTickets");
-
+                // customer thread start
                 Thread customerThread = new Thread(() -> {
                     while (totalTickets.get() > 0) { // Use ticketsToBuy for each customer
                         int ticket = ticketPool.removeTickets(ticketsToBuy);
